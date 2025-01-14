@@ -35,14 +35,7 @@ jobs:
       # Étape 6 : Publier l'application console en tant que fichier .exe autonome
       - name: Publish Console App
         run: |
-          dotnet publish Max.Poulet.ObjectDetection.Console/Max.Poulet.ObjectDetection.Console.csproj \
-            -c Release \
-            -r win-x64 \
-            --self-contained true \
-            /p:PublishSingleFile=true \
-            /p:PublishTrimmed=true \
-            /p:PublishReadyToRun=true \
-            --output ./win-x64/ObjectDetection
+          dotnet publish Max.Poulet.ObjectDetection.Console/Max.Poulet.ObjectDetection.Console.csproj -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true --output ./win-x64/ObjectDetection
 
       # Étape 7 : Uploader l'artefact publié avec `v3`
       - name: Upload Published Artifact
