@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      # Étape 1 : Récupérer le code du dépôt
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Étape 2 : Installer le SDK .NET
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x' # Télécharger la version du SDK .NET 8.0
+
+      # Étape 3 : Restaurer les dépendances
+      - name: Restore Dependencies
+        run: dotnet restore
+
+      # Étape 4 : Compiler la solution
+      - name: Build Solution
+        run: dotnet build --configuration Release
+
+      # Étape 5 : Exécuter les tests unitaires
+      - name: Run Unit Tests
+        run: dotnet test --verbosity normal
+
+      # Étape 6 : Publier l'application console en tant que fichier .exe autonome
+      - name: Publish Console App
+        run: |
+          dotnet publish Max.Poulet.ObjectDetection.Console/Max.Poulet.ObjectDetection.Console.csproj \
+            -c Release \
+            -r win-x64 \
+            --self-contained true \
+            /p:PublishSingleFile=true \
+            /p:PublishTrimmed=true \
+            /p:PublishReadyToRun=true \
+            --output ./win-x64/ObjectDetection
+
+      # Étape 7 : Uploader l'artefact publié avec `v3`
+      - name: Upload Published Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: Published ObjectDetection Console App
+          path: ./win-x64/ObjectDetection

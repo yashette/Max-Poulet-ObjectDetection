@@ -1,0 +1,6 @@
+@Max.Poulet.ObjectDetection.WebApi_HostAddress = http://localhost:5159
+
+GET {{Max.Poulet.ObjectDetection.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
